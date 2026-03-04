@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UX Design Interview 2026 — Wendy Lee</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ===========================================
+       PAPER & INK — DESIGN SYSTEM
+       Palette: Ivory paper / Deep ink / Warm sienna
+       Type:    Cormorant Garamond (display) + DM Sans (body)
+       Motion:  Slow, considered, 400-600ms
+       =========================================== */
+    :root {
+      --bg:           #f2f5f8;
+      --surface:      #e6ecf2;
+      --text:         #111820;
+      --muted:        #7a8a9a;
+      --accent:       #3a6fa8;
+      --border:       #ccd5e0;
+      --font-display: 'Newsreader', Georgia, serif;
+      --font-body:    'DM Sans', system-ui, sans-serif;
+      --font:         'DM Sans', system-ui, sans-serif;
+
+      /* Type scale — all clamp() for viewport safety */
+      --hero:  clamp(2.8rem, 7.5vw, 6.5rem);
+      --h2:    clamp(1.5rem, 3.2vw, 2.6rem);
+      --h3:    clamp(1.05rem, 1.75vw, 1.4rem);
+      --body:  clamp(0.95rem, 1.3vw,  1.1rem);
+      --label: clamp(0.75rem, 0.9vw,  0.88rem);
+      --huge:  clamp(5rem, 13vw, 12rem);
+
+      /* Spacing */
+      --pad:  clamp(1.8rem, 4.5vw, 4.5rem);
+      --gap:  clamp(0.5rem, 1vw,   1rem);
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+      height: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      height: 100%;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===========================================
+       SLIDE BASE — CRITICAL: 100vh, no overflow
+       =========================================== */
+    .slide {
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      scroll-snap-align: start;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      position: relative;
+      background: var(--bg);
+    }
+
+    /* ---- Header bar (all non-title slides) ---- */
+    .slide-header {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      padding: var(--pad) var(--pad) 0;
+    }
+
+    .slide-num {
+      font-size: var(--label);
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.18em;
+      min-width: 2ch;
+    }
+
+    .slide-rule {
+      flex: 1;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .slide-category {
+      font-size: var(--label);
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    /* ---- Body layout ---- */
+    .slide-body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: clamp(1.2rem, 2.5vw, 2.5rem) var(--pad) var(--pad);
+      max-height: 100%;
+      overflow: hidden;
+      gap: var(--gap);
+    }
+
+    .slide-body.split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: clamp(1.5rem, 3vw, 3rem);
+    }
+
+    .slide-body.split-wide {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      align-items: center;
+      gap: clamp(1.5rem, 3vw, 3rem);
+    }
+
+    .slide-body.split-img-left {
+      display: grid;
+      grid-template-columns: 2fr 3fr;
+      align-items: center;
+      gap: clamp(1.5rem, 3vw, 3rem);
+    }
+
+    /* ===========================================
+       TYPOGRAPHY SYSTEM
+       =========================================== */
+    .t-hero  { font-family: var(--font-display); font-size: var(--hero); font-weight: 700; line-height: 1.0; letter-spacing: -0.01em; font-style: italic; }
+    .t-h2    { font-family: var(--font-display); font-size: var(--h2);   font-weight: 600; line-height: 1.25; letter-spacing: 0; }
+    .t-h3    { font-family: var(--font-display); font-size: var(--h3);   font-weight: 600; line-height: 1.4; }
+    .t-body  { font-family: var(--font-body);    font-size: var(--body); font-weight: 400; line-height: 1.7; }
+    .t-label { font-family: var(--font-body);    font-size: var(--label); font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+    .t-accent { color: var(--accent); }
+    .t-muted  { color: var(--muted); }
+
+    /* ===========================================
+       COMPONENTS
+       =========================================== */
+
+    /* Bullet list */
+    .bullet-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap);
+    }
+
+    .bullet-list li {
+      font-size: var(--body);
+      line-height: 1.55;
+      padding-left: 1.2em;
+      position: relative;
+      color: #2a3545;
+    }
+
+    .bullet-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.68em;
+      width: 6px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    /* Tag chips */
+    .tag {
+      display: inline-block;
+      font-size: var(--label);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.25em 0.75em;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      border-radius: 999px;
+    }
+
+    /* Image wrapper */
+    .img-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .img-wrap img {
+      max-width: 100%;
+      max-height: min(72vh, 600px);
+      object-fit: contain;
+      display: block;
+    }
+
+    /* Accent line decoration */
+    .accent-line {
+      width: 2.5rem;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    /* Quote mark */
+    .quote-mark {
+      font-family: var(--font-display);
+      font-size: clamp(5rem, 10vw, 10rem);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--accent);
+      line-height: 0.5;
+      margin-bottom: 0.4rem;
+    }
+
+    /* Challenge grid (Slide 08) */
+    .challenge-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(0.75rem, 1.5vw, 1.5rem);
+    }
+
+    .challenge-card {
+      border: 1px solid var(--border);
+      padding: clamp(1rem, 2vw, 1.75rem);
+      background: var(--surface);
+      transition: transform 0.25s var(--ease), border-color 0.25s ease, box-shadow 0.25s ease;
+      cursor: default;
+    }
+
+    .challenge-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+    }
+
+    .challenge-card-title {
+      font-size: var(--label);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.85rem;
+    }
+
+    .challenge-item {
+      font-size: var(--body);
+      color: #2a3545;
+      padding: 0.3em 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .challenge-item:last-child { border-bottom: none; }
+
+    /* Scope grid (Slide 11) */
+    .scope-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(0.75rem, 1.5vw, 1.5rem);
+    }
+
+    .scope-card {
+      border: 1px solid var(--border);
+      padding: clamp(0.85rem, 1.5vw, 1.25rem);
+      background: var(--surface);
+      transition: transform 0.25s var(--ease), border-color 0.25s ease, box-shadow 0.25s ease;
+      cursor: default;
+    }
+
+    .scope-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+    }
+
+    .scope-card-label {
+      font-size: var(--label);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+      display: block;
+    }
+
+    /* Metrics (Slides 09, 19) */
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: clamp(0.75rem, 1.5vw, 1.25rem);
+      max-width: 760px;
+    }
+
+    .metric {
+      border: 1px solid var(--border);
+      padding: clamp(0.75rem, 1.5vw, 1.25rem);
+      background: var(--surface);
+      transition: transform 0.25s var(--ease), border-color 0.25s ease, box-shadow 0.25s ease;
+      cursor: default;
+    }
+
+    .metric:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+    }
+
+    .metric-value {
+      font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+      font-weight: 900;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .metric-label {
+      font-size: var(--label);
+      color: var(--muted);
+      margin-top: 0.4em;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* Legacy issues (Slide 14) */
+    .legacy-issues {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(0.6rem, 1.2vw, 1rem);
+    }
+
+    .legacy-issue {
+      border-left: 2px solid var(--accent);
+      padding-left: 1rem;
+    }
+
+    /* Testimonial (Slide 19) */
+    .testimonial-wrap {
+      display: flex;
+      gap: clamp(1rem, 2.5vw, 2rem);
+      align-items: flex-start;
+      margin-bottom: clamp(1rem, 2vw, 1.75rem);
+    }
+
+    .testimonial-photo img {
+      width: clamp(52px, 7vw, 80px);
+      height: clamp(52px, 7vw, 80px);
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .testimonial-quote {
+      font-size: var(--h3);
+      font-weight: 500;
+      font-style: italic;
+      color: var(--text);
+      line-height: 1.45;
+      margin-bottom: 0.5rem;
+    }
+
+    .testimonial-name {
+      font-size: var(--label);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* Big background chapter number */
+    .chapter-num {
+      font-size: var(--huge);
+      font-weight: 900;
+      color: var(--surface);
+      line-height: 1;
+      letter-spacing: -0.05em;
+      user-select: none;
+      pointer-events: none;
+      position: absolute;
+      right: var(--pad);
+      bottom: calc(var(--pad) * 0.5);
+    }
+
+    /* ===========================================
+       TITLE SLIDE — SLIDE 01
+       =========================================== */
+    .slide-title {
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      scroll-snap-align: start;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      background: var(--bg);
+    }
+
+    .title-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: var(--pad);
+      gap: clamp(0.75rem, 1.5vw, 1.5rem);
+    }
+
+    .title-right {
+      position: relative;
+      overflow: hidden;
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .title-right::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 60% 50%, rgba(230, 51, 41, 0.05) 0%, transparent 70%);
+    }
+
+    .title-right img {
+      max-width: 95%;
+      max-height: min(92vh, 800px);
+      object-fit: contain;
+      filter: drop-shadow(0 24px 60px rgba(0,0,0,0.18));
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===========================================
+       THANK YOU SLIDE — SLIDE 20
+       =========================================== */
+    .slide-thanks {
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      scroll-snap-align: start;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: var(--pad);
+      position: relative;
+      background: var(--bg);
+    }
+
+    .slide-thanks::before {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 40%;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    /* ===========================================
+       NAVIGATION
+       =========================================== */
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.4s var(--ease);
+      z-index: 200;
+      width: 0;
+    }
+
+    .nav-dots {
+      position: fixed;
+      right: clamp(0.75rem, 2vw, 1.25rem);
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      z-index: 100;
+    }
+
+    .nav-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #a0b2c8;
+      cursor: pointer;
+      transition: all 0.3s var(--ease);
+      border: none;
+      padding: 0;
+      outline: none;
+    }
+
+    .nav-dot:focus-visible {
+      outline: 1px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .nav-dot.active {
+      background: var(--accent);
+      height: 14px;
+      border-radius: 2px;
+    }
+
+    /* ===========================================
+       ANIMATIONS — Fade + slide up
+       Add .visible class via IntersectionObserver
+       =========================================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+    }
+
+    .slide.visible .reveal,
+    .slide-title.visible .reveal,
+    .slide-thanks.visible .reveal {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-24px);
+      transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+    }
+
+    .slide.visible .reveal-left,
+    .slide-title.visible .reveal-left {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* ===========================================
+       RESPONSIVE BREAKPOINTS
+       =========================================== */
+    @media (max-height: 700px) {
+      :root {
+        --pad: clamp(1.2rem, 3vw, 2.5rem);
+        --gap: clamp(0.35rem, 0.75vw, 0.7rem);
+        --hero: clamp(2rem, 6vw, 4rem);
+        --h2: clamp(1.2rem, 2.8vw, 2rem);
+      }
+      .chapter-num { display: none; }
+      .img-wrap img { max-height: min(58vh, 440px); }
+    }
+
+    @media (max-height: 600px) {
+      :root {
+        --pad: clamp(1rem, 2.5vw, 2rem);
+        --gap: clamp(0.3rem, 0.6vw, 0.55rem);
+      }
+      .nav-dots, .progress-bar { display: none; }
+    }
+
+    @media (max-height: 500px) {
+      :root {
+        --hero: clamp(1.5rem, 5vw, 2.8rem);
+        --h2: clamp(1rem, 2.2vw, 1.5rem);
+        --body: clamp(0.68rem, 1vw, 0.82rem);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .slide-title,
+      .slide-body.split,
+      .slide-body.split-wide,
+      .slide-body.split-img-left {
+        grid-template-columns: 1fr;
+      }
+      .title-right { display: none; }
+      .metrics { grid-template-columns: repeat(2, 1fr); }
+      .challenge-grid,
+      .scope-grid { grid-template-columns: 1fr; }
+      .img-wrap { display: none; } /* hide images on very narrow viewports */
+      :root { --hero: clamp(2rem, 9vw, 4rem); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal, .reveal-left {
+        transition: opacity 0.2s;
+        transform: none;
+      }
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Progress bar -->
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- Navigation dots -->
+  <nav class="nav-dots" id="navDots" aria-label="Slide navigation"></nav>
+
+
+  <!-- =====================================================
+       SLIDE 01 — TITLE
+       ===================================================== -->
+  <section class="slide-title" data-slide="1">
+    <div class="title-left">
+      <div class="reveal" style="transition-delay:0.05s;">
+        <div class="accent-line"></div>
+      </div>
+      <h1 class="t-h2 reveal" style="transition-delay:0.1s; font-weight:900; font-size:clamp(2rem, 4.5vw, 3.8rem);">Portfolio 2026</h1>
+      <div class="reveal" style="transition-delay:0.25s;">
+        <p class="t-h3" style="font-weight:700;">Wendy Lee</p>
+        <p class="t-body t-muted" style="margin-top:0.2rem;">Senior UX Designer · PayPal</p>
+      </div>
+      <p class="t-body reveal" style="transition-delay:0.35s; color:#5a6878; max-width:38ch; line-height:1.7;">
+        Designing complex financial systems into simple, scalable experiences — across regulations, regions, and real constraints.
+      </p>
+    </div>
+    <div class="title-right">
+      <img src="ux-design-interview-assets/slide1_img2.png" alt="Apple Card UI" class="reveal" style="transition-delay:0.2s;">
+    </div>
+    <!-- Speaker note: Thank you so much for the opportunity to interview. -->
+  </section>
+
+
+  <!-- =====================================================
+       SLIDE 02 — DESIGN PHILOSOPHY
+       ===================================================== -->
+  <section class="slide" data-slide="2">
+    <header class="slide-header">
+      <span class="slide-num">02</span>
+      <div class="slide-rule"></div>
+      <span class="slide-category">Philosophy</span>
+    </header>
+    <div class="slide-body split-wide">
+      <div>
+        <p class="t-label reveal" style="transition-delay:0.05s; margin-bottom:clamp(0.5rem,1vw,1rem);">Design Approach</p>
+        <h2 class="t-h2 reveal" style="transition-delay:0.15s; margin-bottom:clamp(0.75rem,1.5vw,1.5rem);">
+          In payments, constraints aren't blockers — they shape the design
+        </h2>
+        <ul class="bullet-list reveal" style="transition-delay:0.25s;">
+          <li>Start with the edges: regulations, regional rules, engineering limits, legal requirements</li>
+          <li>Find where user goals and business goals overlap</li>
+          <li>Work backwards from constraints to create something both scalable and human</li>
+        </ul>
+      </div>
+      <div class="img-wrap reveal" style="transition-delay:0.1s;">
+        <img src="ux-design-interview-assets/slide2_img1.png"
+          alt="Design — hand with quill"
+          style="max-height:min(55vh,420px); opacity:0.35;">
+      </div>
+    </div>
+    <!-- Speaker note: I start with the edges. Regulations, regional rules, engineering limits, legal requirements — these are the edges of the design space. -->
+  </section>
+
+
+  <!-- =====================================================
+       SLIDE 03 — BACKGROUND
+       ===================================================== -->
+  <section class="slide" data-slide="3">
+    <header class="slide-header">
+      <span class="slide-num">03</span>
+      <div class="slide-rule"></div>
+      <span class="slide-category">Background</span>
+    </header>
+    <div class="slide-body">
+      <h2 class="t-h2 reveal" style="transition-delay:0.05s; margin-bottom:clamp(1.2rem,2.5vw,2.5rem);">Career Arc</h2>
+      <div style="display:flex; flex-direction:column; gap:clamp(0.85rem,1.75vw,1.75rem);">
+        <div class="reveal" style="transition-delay:0.15s; border-left:2px solid var(--border); padding-left:1.25rem;">
+          <p class="t-label" style="margin-bottom:0.2rem;">2019 – 2023</p>
+          <p class="t-h3" style="font-weight:700;">Product Designer · Voyant</p>
+          <p class="t-body t-muted">Financial Planning Software</p>
+        </div>
+        <div class="reveal" style="transition-delay:0.25s; border-left:2px solid var(--border); padding-left:1.25rem;">
+          <p class="t-label" style="margin-bottom:0.2rem;">Oct 2023 – Oct 2024</p>
+          <p class="t-h3" style="font-weight:700;">Senior Product Designer · Goldman Sachs</p>
+          <p class="t-body t-muted">Apple Card Servicing</p>
+        </div>
+        <div class="reveal" style="transition-delay:0.35s; border-left:2px solid var(--accent); padding-left:1.25rem;">
+          <p class="t-label" style="color:var(--accent); margin-bottom:0.2rem;">Oct 2024 – Present</p>
+          <p class="t-h3" style="font-weight:700;">Senior Product Designer · PayPal</p>
+          <p class="t-body t-muted">Financial Servicing</p>
+        </div>
+      </div>
+    </div>
+    <!-- Speaker note: I started my career at a fintech startup called Voyant, where I helped launch two enterprise products in four years. -->
+  </section>
+
+
+  <!-- =====================================================
+       SLIDE 04 — CASE STUDY 01: BNPL INTRO
+       ===================================================== -->
+  <section class="slide" data-slide="4">
+    <header class="slide-header">
+      <span class="slide-num">04</span>
+      <div class="slide-rule"></div>
+      <span class="slide-category">Case Study 01</span>
+    </header>
+    <div class="slide-body split">
+      <div>
+        <p class="t-label reveal" style="transition-delay:0.05s; margin-bottom:0.75rem;">PayPal Consumer</p>
+        <h2 class="t-hero reveal" style="transition-delay:0.15s; margin-bottom:clamp(0.6rem,1.2vw,1.2rem);">Buy Now,<br>Pay Later</h2>
+        <p class="t-body t-muted reveal" style="transition-delay:0.25s; margin-bottom:clamp(0.75rem,1.5vw,1.5rem);">Pay in 4 · Pay Monthly · Pay in installments</p>
+        <div class="reveal" style="transition-delay:0.35s; display:flex; gap:0.5rem; flex-wrap:wrap;">
+          <span class="tag">Choosing a Plan</span>
+          <span class="tag">Making Payments</span>
+          <span class="tag">7 Markets</span>
+        </div>
+      </div>
+      <div class="img-wrap reveal" style="transition-delay:0.1s;">
+        <img src="ux-design-interview-assets/slide4_img1.png" alt="BNPL Pay Monthly screen">
+      </div>
+    </div>
+    <div class="chapter-num">01</div>
+    <!-- Speaker note: Most directly relevant to Google Payments. -->
+  </section>
+
+
+  <!-- =====================================================
+       SLIDE 05 — BNPL: THE PROBLEM
+       ===================================================== -->
+  <section class="slide" data-slide="5">
+    <header class="slide-header">
+      <span class="slide-num">05</span>
+      <div class="slide-rule"></div>
+      <span class="slide-category">The Problem</span>
+    </header>
+    <div class="slide-body split-img-left">
+      <div class="img-wrap reveal" style="transition-delay:0.1s;">
+        <img src="ux-design-interview-assets/slide5_img1.png" alt="Pay in 4 live flow photo">
+      </div>
+      <div>
+        <h2 class="t-h2 reveal" style="transition-delay:0.05s; margin-bottom:clamp(0.75rem,1.5vw,1.5rem);">Payment method was buried</h2>
+        <ul class="bullet-list reveal" style="transition-delay:0.2s;">
+          <li>Poor visual hierarchy for something critical to repayment success</li>
+          <li>Engineer flagged it as a maintenance issue</li>
+          <li>Each region has completely different rules — no unified pattern existed</li>
+        </ul>
+      </div>
+    </div>
+    <!-- Speaker note: Payment method — one of the most critical fields for repayment success — was buried in the plan summary. -->
+  </section>
+
+
+  <!-- =====================================================
+       SLIDE 06 — BNPL: SOLUTION + OUTCOME
+       ===================================================== -->
+  <section class="slide" data-slide="6">
+    <header class="slide-header">
+      <span class="slide-num">06</span>
+      <div class="slide-rule"></div>
+      <span class="slide-category">Solution + Outcome</span>
+    </header>
+    <div class="slide-body split">
+      <div>
+        <h2 class="t-h2 reveal" style="transition-delay:0.05s; margin-bottom:clamp(0.75rem,1.5vw,1.5rem);">Payment method tile elevated</h2>
+        <ul class="bullet-list reveal" style="transition-delay:0.2s;">
+          <li>Modeled on US autopay pattern with regional variances</li>
+          <li>Built full use-case master library</li>
+          <li>Validated with engineering and regional teams</li>
+          <li>Became single source of truth</li>
+          <li>Enabled Canada to launch in record time</li>
+        </ul>
+      </div>
+      <div class="img-wrap reveal" style="transition-delay:0.1s;">
+        <img src="ux-design-interview-assets/slide6_img1.png" alt="BNPL elevated payment method tile">
+      </div>
+    </div>
+    <!-- Speaker note: Consistent across all markets, but flexible enough for regional rules. -->
+  </section>
+
+
+  <!-- =====================================================
+       SLIDE 07 — CASE STUDY 02: UNIFIED DESKTOP INTRO
+       ===================================================== -->
+  <section class="slide" data-slide="7">
+    <header class="slide-header">
+      <span class="slide-num">07</span>
+      <div class="slide-rule"></div>
+      <span class="slide-category">Case Study 02</span>
+    </header>
+    <div class="slide-body split-img-left" style="gap:clamp(5rem, 10vw, 12rem); grid-template-columns:1fr 1fr;">
+      <div class="img-wrap reveal" style="transition-delay:0.1s;">
+        <img src="ux-design-interview-assets/slide7_img3.gif" alt="Unified Desktop CRM tool" style="max-height:min(92vh, 806px);">
+      </div>
+      <div>
+        <p class="t-label reveal" style="transition-delay:0.05s; margin-bottom:0.75rem;">Goldman Sachs · Apple Card</p>
+        <h2 class="t-hero reveal" style="transition-delay:0.15s; margin-bottom:clamp(0.6rem,1.2vw,1.2rem); white-space:nowrap;">Unified Desktop</h2>
+        <p class="t-body t-muted reveal" style="transition-delay:0.25s; margin-bottom:clamp(0.75rem,1.5vw,1.5rem);">A scalable CRM tool that consolidates a fragmented agent system</p>
+        <ul class="bullet-list reveal" style="transition-delay:0.35s;">
+          <li>Streamline agent workflow</li>
+          <li>Enhance customer satisfaction</li>
+          <li>Reduce technical debt</li>
+        </ul>
+      </div>
+    </div>
+    <div class="chapter-num">02</div>
+    <!-- Speaker note: Deep dive into the work at Goldman Sachs for Apple Card. -->
+  </section>
+
+
+  <!-- =====================================================
+       SLIDE 08 — THE CHALLENGE: DUAL PRINCIPALS
+       ===================================================== -->
+  <section class="slide" data-slide="8">
+    <header class="slide-header">
+      <span class="slide-num">08</span>
+      <div class="slide-rule"></div>
+      <span class="slide-category">The Challenge</span>
+    </header>
+    <div class="slide-body">
+      <h2 class="t-h2 reveal" style="transition-delay:0.05s; margin-bottom:clamp(1rem,2vw,2rem);">
+        Aligning two principals with different success metrics
+      </h2>
+      <div class="img-wrap reveal" style="transition-delay:0.2s;">
+        <img src="ux-design-interview-assets/slide8_img1.png" alt="The Challenge — dual principals diagram" style="max-height:min(58vh, 480px);">
+      </div>
+    </div>
+    <!-- Speaker note: Aligning the goals of both Apple and Goldman Sachs was the biggest challenge for this project. -->
+  </section>
+
+
+  <!-- =====================================================
+       SLIDE 09 — OUR GOALS
+       ===================================================== -->
+  <section class="slide" data-slide="9">
+    <header class="slide-header">
+      <span class="slide-num">09</span>
+      <div class="slide-rule"></div>
+      <span class="slide-category">Our Goals</span>
+    </header>
+    <div class="slide-body">
+      <p class="t-label reveal" style="transition-delay:0.05s; margin-bottom:clamp(0.75rem,1.5vw,1.5rem);">How might we…</p>
+      <h2 class="t-h2 reveal" style="transition-delay:0.15s; max-width:52ch; margin-bottom:clamp(1.5rem,3vw,3rem); color:#1a2535; line-height:1.35; font-style:italic; font-weight:500;">
+        "Help agents facilitate a better workflow to enhance customer satisfaction and reduce operational losses?"
+      </h2>
+      <div class="metrics reveal" style="transition-delay:0.3s;">
+        <div class="metric">
+          <p class="metric-value">$3.7M</p>
+          <p class="metric-label">Expense reduction · Goldman</p>
+        </div>
+        <div class="metric">
+          <p class="metric-value">+7%</p>
+          <p class="metric-label">Customer satisfaction · Apple</p>
+        </div>
+      </div>
+    </div>
+    <!-- Speaker note: I posed the HMW question to unify both principals' goals into a single design challenge. -->
+  </section>
+
+
+  <!-- =====================================================
+       SLIDE 10 — USER INSIGHTS
+       ===================================================== -->
+  <section class="slide" data-slide="10">
+    <header class="slide-header">
+      <span class="slide-num">10</span>
+      <div class="slide-rule"></div>
+      <span class="slide-category">User Insights</span>
+    </header>
+    <div class="slide-body">
+      <h2 class="t-h2 reveal" style="transition-delay:0.05s; margin-bottom:clamp(1rem,2vw,2rem);">
+        Conducted onsite research and observations<br>to gather agent feedback on Legacy and Unified Desktop
+      </h2>
+      <div class="scope-grid reveal" style="transition-delay:0.2s;">
+        <div class="scope-card">
+          <span class="scope-card-label">Pain Points</span>
+          <ul class="bullet-list">
+            <li>Navigation was complex and inconsistent across tools</li>
+            <li>Case notes were hard to access mid-customer call</li>
+          </ul>
+        </div>
+        <div class="scope-card">
+          <span class="scope-card-label">What They Loved</span>
+          <ul class="bullet-list">
+            <li>Tooltips significantly reduced the learning curve</li>
+            <li>Guided workflows for complex scenarios</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- Speaker note: I was the design owner. Conducted on-site research on the call floor to gather real agent feedback. -->
+  </section>
+
+
+  <!-- =====================================================
+       SLIDE 11 — NOTABLE SCOPES
+       ===================================================== -->
+  <section class="slide" data-slide="11">
+    <header class="slide-header">
+      <span class="slide-num">11</span>
+      <div class="slide-rule"></div>
+      <span class="slide-category">Scope</span>
+    </header>
+    <div class="slide-body">
+      <h2 class="t-h2 reveal" style="transition-delay:0.05s; margin-bottom:clamp(0.85rem,1.75vw,1.75rem);">Notable Scopes</h2>
+      <div class="scope-grid reveal" style="transition-delay:0.2s;">
+        <div class="scope-card">
+          <span class="scope-card-label">Fraud Strategy</span>
+          <ul class="bullet-list">
+            <li>Saved over $40M in fraud losses</li>
+            <li>Designed fraud alert and escalation workflows</li>
+          </ul>
+        </div>
+        <div class="scope-card">
+          <span class="scope-card-label">Engineering Collaboration</span>
+          <ul class="bullet-list">
+            <li>Responsive design for UD chat integration</li>
+            <li>Information architecture overhaul</li>
+            <li>Design system development</li>
+            <li>Regular QA of Dev Storybook UI</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- Speaker note: I developed a plan focused on cutting costs and raising customer satisfaction simultaneously. -->
+  </section>
+
+
+  <!-- =====================================================
+       SLIDE 12 — PAYMENT & INTEREST: THE PROBLEM
+       ===================================================== -->
+  <section class="slide" data-slide="12">
+    <header class="slide-header">
+      <span class="slide-num">12</span>
+      <div class="slide-rule"></div>
+      <span class="slide-category">Deep Dive</span>
+    </header>
+    <div class="slide-body split">
+      <div>
+        <p class="t-label reveal" style="transition-delay:0.05s; margin-bottom:0.75rem;">Payment & Interest Summary</p>
+        <h2 class="t-h2 reveal" style="transition-delay:0.15s; margin-bottom:clamp(0.75rem,1.5vw,1.5rem);">Customers don't understand the statements</h2>
+        <p class="t-body t-muted reveal" style="transition-delay:0.25s;">
+          Agents struggle to clarify them — every call required manual, verbal explanation of confusing financial data with no UI support
+        </p>
+      </div>
+      <div class="img-wrap reveal" style="transition-delay:0.1s;">
+        <img src="ux-design-interview-assets/slide12_img1.png" alt="Confusing Apple Card statement with customer annotation">
+      </div>
+    </div>
+    <!-- Speaker note: I want to walk you through how I translate complex financial data into clear and understandable UI. -->
+  </section>
+
+
+  <!-- =====================================================
+       SLIDE 13 — DESIGN GOAL (QUOTE SLIDE)
+       ===================================================== -->
+  <section class="slide" data-slide="13">
+    <header class="slide-header">
+      <span class="slide-num">13</span>
+      <div class="slide-rule"></div>
+      <span class="slide-category">Design Goal</span>
+    </header>
+    <div class="slide-body" style="justify-content:center; max-width:70ch;">
+      <div class="quote-mark reveal" style="transition-delay:0.05s;">"</div>
+      <p class="t-h2 reveal" style="transition-delay:0.15s; font-family:var(--font-display); font-weight:400; font-style:italic; line-height:1.5; color:#1a2535;">
+        My goal was to simplify explaining things to customers, reducing time and stress for everyone involved.
+      </p>
+    </div>
+    <!-- Speaker note: Realizing how big of an issue this was, I set to dig deeper with the product owner. -->
+  </section>
+
+
+  <!-- =====================================================
+       SLIDE 14 — LEGACY DESIGN ANALYSIS
+       ===================================================== -->
+  <section class="slide" data-slide="14">
+    <header class="slide-header">
+      <span class="slide-num">14</span>
+      <div class="slide-rule"></div>
+      <span class="slide-category">Legacy Analysis</span>
+    </header>
+    <div class="slide-body split-wide">
+      <div>
+        <h2 class="t-h2 reveal" style="transition-delay:0.05s; margin-bottom:clamp(0.85rem,1.75vw,1.75rem);">What the legacy system lacked</h2>
+        <div class="legacy-issues reveal" style="transition-delay:0.2s;">
+          <div class="legacy-issue">
+            <p class="t-body">Only numbers — no field explanations or context for agents</p>
+          </div>
+          <div class="legacy-issue">
+            <p class="t-body">Only payments shown — no interest information at all</p>
+          </div>
+          <div class="legacy-issue">
+            <p class="t-body">Progress bar used incorrectly as payment history indicator</p>
+          </div>
+        </div>
+      </div>
+      <div class="img-wrap reveal" style="transition-delay:0.1s;">
+        <img src="ux-design-interview-assets/slide14_img1.png" alt="Legacy statement UI — confusing layout" style="max-height:min(92vh, 806px);">
+      </div>
+    </div>
+    <!-- Speaker note: The legacy design lacked considerations for explaining what those fields meant, the interest charges, or the payment history. -->
+  </section>
+
+
+  <!-- =====================================================
+       SLIDE 15 — ITERATION 01
+       ===================================================== -->
+  <section class="slide" data-slide="15">
+    <header class="slide-header">
+      <span class="slide-num">15</span>
+      <div class="slide-rule"></div>
+      <span class="slide-category">Iteration 01</span>
+    </header>
+    <div class="slide-body split-img-left" style="grid-template-columns:1fr 1fr;">
+      <div class="img-wrap reveal" style="transition-delay:0.05s;">
+        <img src="ux-design-interview-assets/slide15_img1.png" alt="Payment & Interest Summary — Iteration 1 with explanatory labels" style="max-height:min(92vh, 900px);">
+      </div>
+      <div>
+        <p class="t-label reveal" style="transition-delay:0.1s; margin-bottom:0.75rem;">Payment & Interest Summary</p>
+        <h2 class="t-h2 reveal" style="transition-delay:0.2s; margin-bottom:clamp(0.75rem,1.5vw,1.5rem);">Explanatory labels for every field</h2>
+        <p class="t-body t-muted reveal" style="transition-delay:0.3s;">
+          Instead of raw numbers, each field was annotated in context — taking the guesswork out for agents during live customer calls
+        </p>
+      </div>
+    </div>
+    <!-- Speaker note: I thought about how we could take the guesswork out for the agents. -->
+  </section>
+
+
+  <!-- =====================================================
+       SLIDE 16 — ITERATION 02
+       ===================================================== -->
+  <section class="slide" data-slide="16">
+    <header class="slide-header">
+      <span class="slide-num">16</span>
+      <div class="slide-rule"></div>
+      <span class="slide-category">Iteration 02</span>
+    </header>
+    <div class="slide-body split-img-left" style="grid-template-columns:1fr 1fr;">
+      <div class="img-wrap reveal" style="transition-delay:0.05s;">
+        <img src="ux-design-interview-assets/slide16_img1.png" alt="Payment & Interest Summary — Iteration 2 with chart" style="max-height:min(92vh, 900px);">
+      </div>
+      <div>
+        <p class="t-label reveal" style="transition-delay:0.1s; margin-bottom:0.75rem;">Payment & Interest Summary</p>
+        <h2 class="t-h2 reveal" style="transition-delay:0.2s; margin-bottom:clamp(0.75rem,1.5vw,1.5rem);">Added chart + payment breakdown</h2>
+        <p class="t-body t-muted reveal" style="transition-delay:0.3s;">
+          A visual chart and breakdown helped explain the total balance for the month — reducing the need for verbal explanation even further
+        </p>
+      </div>
+    </div>
+    <!-- Speaker note: I added a chart and a payment breakdown to help explain the total balance for the month. -->
+  </section>
+
+
+  <!-- =====================================================
+       SLIDE 17 — EVERYONE LOVED IT. BUT...
+       ===================================================== -->
+  <section class="slide" data-slide="17">
+    <header class="slide-header">
+      <span class="slide-num">17</span>
+      <div class="slide-rule"></div>
+      <span class="slide-category">Constraint</span>
+    </header>
+    <div class="slide-body split">
+      <div>
+        <h2 class="t-h2 reveal" style="transition-delay:0.05s; margin-bottom:clamp(0.4rem,0.8vw,0.8rem);">Everyone loved it.</h2>
+        <p class="t-h2 t-accent reveal" style="transition-delay:0.15s; margin-bottom:clamp(0.75rem,1.5vw,1.5rem);">But…</p>
+        <p class="t-body t-muted reveal" style="transition-delay:0.25s; margin-bottom:clamp(0.5rem,1vw,1rem);">
+          The month-over-month comparison chart was too technically complex to build within the engineering timeline
+        </p>
+        <p class="t-body t-muted reveal" style="transition-delay:0.35s;">
+          Agent management even wanted to adopt the design for their own dashboard — a constraint that shaped the final solution
+        </p>
+      </div>
+      <div class="img-wrap reveal" style="transition-delay:0.1s;">
+        <img src="ux-design-interview-assets/slide17_img1.png" alt="Iteration 2 full design with chart">
+      </div>
+    </div>
+    <!-- Speaker note: Engineering couldn't implement the month-over-month comparison within the timeline. -->
+  </section>
+
+
+  <!-- =====================================================
+       SLIDE 18 — FINAL ITERATION
+       ===================================================== -->
+  <section class="slide" data-slide="18">
+    <header class="slide-header">
+      <span class="slide-num">18</span>
+      <div class="slide-rule"></div>
+      <span class="slide-category">Final Design</span>
+    </header>
+    <div class="slide-body split-img-left" style="grid-template-columns:1fr 1fr;">
+      <div class="img-wrap reveal" style="transition-delay:0.05s;">
+        <img src="ux-design-interview-assets/slide18_img1.gif" alt="Final Payment & Interest Summary design" style="max-height:min(92vh, 900px); filter:drop-shadow(0 8px 24px rgba(0,0,0,0.18));">
+      </div>
+      <div>
+        <p class="t-label reveal" style="transition-delay:0.1s; margin-bottom:0.75rem;">Payment & Interest Summary</p>
+        <h2 class="t-h2 reveal" style="transition-delay:0.2s; margin-bottom:clamp(0.75rem,1.5vw,1.5rem);">Constraints shaped the solution</h2>
+        <p class="t-body t-muted reveal" style="transition-delay:0.3s;">
+          Removed the summary overview but kept all explanatory labels and interest breakdown — a leaner version that met 100% of engineering requirements while meaningfully reducing agent cognitive load
+        </p>
+      </div>
+    </div>
+    <!-- Speaker note: After several months of iteration, I ended up with a version that removed the summary but kept all the key improvements. -->
+  </section>
+
+
+  <!-- =====================================================
+       SLIDE 19 — RESULTS + TESTIMONIAL
+       ===================================================== -->
+  <section class="slide" data-slide="19">
+    <header class="slide-header">
+      <span class="slide-num">19</span>
+      <div class="slide-rule"></div>
+      <span class="slide-category">Outcome</span>
+    </header>
+    <div class="slide-body">
+      <div class="testimonial-wrap reveal" style="transition-delay:0.1s;">
+        <div class="testimonial-photo">
+          <img src="ux-design-interview-assets/slide19_img1.png" alt="Jennifer — Goldman Sachs Servicing Tier 1 Agent">
+        </div>
+        <div>
+          <p class="t-h2" style="font-style:italic; margin-bottom:0.5rem;">"We 100% prefer Unified Desktop than the old Legacy system!"</p>
+          <p class="testimonial-name">Jennifer · Goldman Sachs Servicing, Tier 1 Agent</p>
+        </div>
+      </div>
+      <div class="metrics reveal" style="transition-delay:0.25s;">
+        <div class="metric">
+          <p class="metric-value">65s</p>
+          <p class="metric-label">Decrease in AHT to date</p>
+        </div>
+        <div class="metric">
+          <p class="metric-value">$3.7M</p>
+          <p class="metric-label">Technical & operational savings</p>
+        </div>
+        <div class="metric">
+          <p class="metric-value">+7%</p>
+          <p class="metric-label">Improved CSAT since launch</p>
+        </div>
+      </div>
+    </div>
+    <!-- Speaker note: Our efforts led to a 65-second reduction in agent handling time since launch. -->
+  </section>
+
+
+  <!-- =====================================================
+       SLIDE 20 — THANK YOU
+       ===================================================== -->
+  <section class="slide-thanks" data-slide="20">
+    <p class="t-label reveal" style="transition-delay:0.05s; margin-bottom:clamp(0.5rem,1vw,1rem);">Wendy Lee · 2026</p>
+    <h2 class="t-hero reveal" style="transition-delay:0.15s; line-height:1.0; margin-bottom:clamp(0.5rem,1vw,1rem);">Thank you,</h2>
+    <p class="t-h3 t-muted reveal" style="transition-delay:0.25s;">Questions?</p>
+    <div class="reveal" style="transition-delay:0.35s; margin-top:clamp(2rem,4vw,4rem);">
+      <div class="accent-line"></div>
+    </div>
+    <!-- Speaker note: Thank you so much for listening! That's the end of my presentation. -->
+  </section>
+
+
+  <script>
+    /* ===========================================
+       SLIDE PRESENTATION CONTROLLER
+       Handles: keyboard nav, touch swipe, wheel
+       scroll, intersection-based animations,
+       progress bar, navigation dots.
+       =========================================== */
+    class SlidePresentation {
+      constructor() {
+        this.slides = Array.from(document.querySelectorAll('[data-slide]'));
+        this.total = this.slides.length;
+        this.current = 0;
+        this.isScrolling = false;
+        this.wheelTimer = null;
+
+        this.progressBar = document.getElementById('progressBar');
+        this.navDotsEl  = document.getElementById('navDots');
+
+        this.init();
+      }
+
+      init() {
+        this.buildNavDots();
+        this.setupObserver();
+        this.setupKeyboard();
+        this.setupTouch();
+        this.setupWheel();
+        this.updateUI(0);
+      }
+
+      /* ---- Navigation dots ---- */
+      buildNavDots() {
+        this.slides.forEach((_, i) => {
+          const btn = document.createElement('button');
+          btn.className = 'nav-dot';
+          btn.setAttribute('aria-label', `Slide ${i + 1}`);
+          btn.addEventListener('click', () => this.goTo(i));
+          this.navDotsEl.appendChild(btn);
+        });
+      }
+
+      /* ---- Intersection Observer: triggers animations + UI updates ---- */
+      setupObserver() {
+        const io = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+              entry.target.classList.add('visible');
+              const idx = this.slides.indexOf(entry.target);
+              if (idx !== -1) {
+                this.current = idx;
+                this.updateUI(idx);
+              }
+            }
+          });
+        }, { threshold: 0.5 });
+
+        this.slides.forEach(s => io.observe(s));
+      }
+
+      /* ---- Update progress bar + nav dots ---- */
+      updateUI(idx) {
+        const pct = ((idx + 1) / this.total) * 100;
+        this.progressBar.style.width = `${pct}%`;
+        Array.from(this.navDotsEl.children).forEach((dot, i) => {
+          dot.classList.toggle('active', i === idx);
+        });
+      }
+
+      /* ---- Scroll to a specific slide ---- */
+      goTo(idx) {
+        idx = Math.max(0, Math.min(idx, this.total - 1));
+        this.slides[idx]?.scrollIntoView({ behavior: 'smooth' });
+      }
+
+      /* ---- Keyboard navigation ---- */
+      setupKeyboard() {
+        document.addEventListener('keydown', e => {
+          // Don't intercept when typing in an input
+          if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+          switch (e.key) {
+            case 'ArrowDown':
+            case 'ArrowRight':
+            case ' ':
+              e.preventDefault();
+              this.goTo(this.current + 1);
+              break;
+            case 'ArrowUp':
+            case 'ArrowLeft':
+              e.preventDefault();
+              this.goTo(this.current - 1);
+              break;
+            case 'Home':
+              e.preventDefault();
+              this.goTo(0);
+              break;
+            case 'End':
+              e.preventDefault();
+              this.goTo(this.total - 1);
+              break;
+            case 'r':
+            case 'R':
+              e.preventDefault();
+              this.goTo(0);
+              break;
+          }
+        });
+      }
+
+      /* ---- Touch / swipe navigation ---- */
+      setupTouch() {
+        let startY = 0, startX = 0;
+
+        document.addEventListener('touchstart', e => {
+          startY = e.touches[0].clientY;
+          startX = e.touches[0].clientX;
+        }, { passive: true });
+
+        document.addEventListener('touchend', e => {
+          const dy = startY - e.changedTouches[0].clientY;
+          const dx = startX - e.changedTouches[0].clientX;
+          if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 40) {
+            this.goTo(dy > 0 ? this.current + 1 : this.current - 1);
+          }
+        }, { passive: true });
+      }
+
+      /* ---- Mouse wheel — one slide at a time ---- */
+      setupWheel() {
+        document.addEventListener('wheel', e => {
+          e.preventDefault();
+          if (this.isScrolling) return;
+          this.isScrolling = true;
+
+          this.goTo(e.deltaY > 0 ? this.current + 1 : this.current - 1);
+
+          clearTimeout(this.wheelTimer);
+          this.wheelTimer = setTimeout(() => {
+            this.isScrolling = false;
+          }, 850);
+        }, { passive: false });
+      }
+    }
+
+    new SlidePresentation();
+
+    /* ===========================================
+       LIGHTBOX
+       Click any .img-wrap img to expand it.
+       Dismiss with click, Escape, or clicking outside.
+       =========================================== */
+    const lightbox = document.createElement('div');
+    lightbox.id = 'lightbox';
+    lightbox.style.cssText = `
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,0.85);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.25s ease;
+      cursor: zoom-out;
+      backdrop-filter: blur(4px);
+    `;
+    const lightboxImg = document.createElement('img');
+    lightboxImg.style.cssText = `
+      max-width: 90vw; max-height: 90vh;
+      object-fit: contain;
+      border-radius: 4px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+      transform: scale(0.96);
+      transition: transform 0.25s ease;
+      pointer-events: none;
+    `;
+    lightbox.appendChild(lightboxImg);
+    document.body.appendChild(lightbox);
+
+    function openLightbox(src, alt) {
+      lightboxImg.src = src;
+      lightboxImg.alt = alt || '';
+      lightbox.style.opacity = '1';
+      lightbox.style.pointerEvents = 'auto';
+      setTimeout(() => { lightboxImg.style.transform = 'scale(1)'; }, 10);
+    }
+
+    function closeLightbox() {
+      lightboxImg.style.transform = 'scale(0.96)';
+      lightbox.style.opacity = '0';
+      lightbox.style.pointerEvents = 'none';
+    }
+
+    lightbox.addEventListener('click', closeLightbox);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+    // Make all product images in .img-wrap clickable
+    document.querySelectorAll('.img-wrap img').forEach(img => {
+      img.style.cursor = 'zoom-in';
+      img.addEventListener('click', e => {
+        e.stopPropagation();
+        openLightbox(img.src, img.alt);
+      });
+    });
+  </script>
+</body>
+</html>
